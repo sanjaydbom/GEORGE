@@ -30,7 +30,7 @@ I implemented the GEORGE method on a modified MNIST dataset where each digit (0-
 
 Trained a convolutional neural network (CNN) using empirical risk minimization (ERM) to classify digits.
 Extracted features from the penultimate layer for clustering. We use a batch size of 5 when training.
-Saved model weights as erm_weights.pt.
+Saved model weights as model.pt.
 
 ***Step 2: Subclass Estimation (Clustering.ipynb)***
 
@@ -40,7 +40,7 @@ Generated cluster_labels.csv with cluster assignments for training and validatio
 ***Step 3: Robust Training (GDRO.ipynb)***
 
 Trained a new CNN using group DRO, minimizing worst-case loss over estimated subclasses from cluster_labels.csv.
-Saved robust model weights as gdro_weights.pt.
+Saved robust model weights as model2.pt.
 
 ***Dataset***
 
@@ -60,14 +60,25 @@ The ERM baseline achieved *56%* robust accuracy (worst-case subclass accuracy), 
 # Visualizations
 ***Loss Over Epochs***
 
+![Training and Testing Loss](ERM.png)
+
 *Figure 1: Training and Testing loss for ERM*
+
+![scaled_training loss](unscaled_loss.png)
 
 *Figure 2: Testing loss for group DRO, scaled to the size of the ERM loss plot*
 
+![unscaled training loss](scaled_loss.png)
+
 *Figure 3: Testing loss for group DRO, unscaled*
 
+</br>
 
 ***Sample Digits***
+
+![sample digit](digit.png)
+
+*Figure 4: Digit with spurious correlation (background)*
 
 # Reproducibility
 To reproduce the results, ensure a Python environment with PyTorch, UMAP, scikit-learn, pandas, matplotlib, and seaborn. A GPU is recommended for faster training.
@@ -76,14 +87,14 @@ Clone the repository:
 
 Install dependencies:
 `conda env create -f environment.yml`
-`conda activate george-mnist`
+`conda activate george`
 
 [Note: Create environment.yml with dependencies; see example below.]
 Run the notebooks in order:
 
-ERM Training: Open ERM.ipynb and execute all cells to train the ERM model and save erm_weights.pt.
+ERM Training: Open ERM.ipynb and execute all cells to train the ERM model and save model.pt.
 Clustering: Open Clustering.ipynb, ensure erm_weights.pt and train_images.pt/train_labels.pt are in the root directory, and run to generate cluster_labels.csv.
-GDRO Training: Open GDRO.ipynb, ensure cluster_labels.csv and gdro_weights.pt are available, and run to train the GEORGE model and save gdro_weights.pt.
+GDRO Training: Open GDRO.ipynb, ensure cluster_labels.csv and gdro_weights.pt are available, and run to train the GEORGE model and save model2.pt.
 
 Evaluate results:
 
@@ -110,11 +121,20 @@ dependencies:
   - pip:
       - notebook
 
-Citation
-"No Subclass Left Behind: Fine-Grained Robustness in Coarse-Grained Classification Problems"
-Contact and Contributing
-For feedback or questions, contact Sanjay Dhamodharan at sanjayd@g.ucla.edu or open a GitHub Issue. Contributions are welcome; see CONTRIBUTING.md for guidelines.
-License
-This project is licensed under the MIT License - see LICENSE for details.
-Acknowledgements
+# Citation
+
+["No Subclass Left Behind: Fine-Grained Robustness in Coarse-Grained Classification Problems"](https://arxiv.org/abs/2011.12945)
+
+["UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction"](https://arxiv.org/abs/1802.03426)
+
+# Contact and Contributing
+
+For feedback or questions, contact Sanjay Dhamodharan at sanjayd@g.ucla.edu or open a GitHub Issue.
+
+# License
+
+This project is licensed under the MIT License
+
+# Acknowledgements
+
 Thanks to Sohoni et al. for their pioneering GEORGE method, the BigML research group at UCLA for inspiring this project, and PyTorch, UMAP, scikit-learn, and pandas for enabling the implementation.
