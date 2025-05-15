@@ -4,7 +4,7 @@ This repository recreates the GEORGE method from Sohoni et al. (2022) to address
 
 # Abstract
 
-Spurious correlation occurs when coarse-grained class labels obscure finer-grained subclasses, leading to poor model performance on critical subsets. This project recreates the GEORGE method from "No Subclass Left Behind" (Sohoni et al., 2022), applied to a modified MNIST dataset where each digit ($0-9$) has a primary background color $95%$ of the time and a secondary color $5%$ of the time, creating latent subclasses. Using PyTorch, I implemented GEORGE's two-step process: clustering features from an ERM-trained model and training a robust classifier with group DRO. My implementation improved robust accuracy (worst-case subclass accuracy) from $56%$ (ERM) to $76%$ (GEORGE), a $20%$ increase, demonstrating effective mitigation of spurious correlations.
+Spurious correlation occurs when coarse-grained class labels obscure finer-grained subclasses, leading to poor model performance on critical subsets. This project recreates the GEORGE method from "No Subclass Left Behind" (Sohoni et al., 2022), applied to a modified MNIST dataset where each digit ($0-9$) has a primary background color $95%$ of the time and a secondary color $5%$ of the time, creating latent subclasses. Using PyTorch, I implemented GEORGE's two-step process: clustering features from an ERM-trained model and training a robust classifier with group DRO. My implementation improved robust accuracy (worst-case subclass accuracy) from $0$% (ERM) to $18$% (GEORGE), a $18$ point increase, demonstrating effective mitigation of spurious correlations.
 # Table of Contents
 - Background and Motivation
 - Methods and Implementation
@@ -53,32 +53,36 @@ The modified MNIST dataset was gotten using SpuCo package
 The CNN has 2 convolutional layers with the first layer being *9 x (5 x 5)* and the second layer being *18 x (5 x 5)*, with a maxpool window of *2 x 2* and one fully connected layers, trained with the AdamW optimizer (learning rate 0.001).
 Clustering used UMAP and scikit-learn.
 
-***Results and Discussion***
+# Results and Discussions
 
-The ERM baseline achieved *56%* robust accuracy (worst-case subclass accuracy), struggling with rare background color subclasses due to dataset imbalance. GEORGE improved robust accuracy to *76%*, an *20* point increase, by identifying and optimizing for these subclasses. This aligns with the paper's reported improvements (e.g., $22%$ on datasets like Waterbirds). Challenges included ensuring clustering captured small subclasses and managing DRO's computational cost. Limitations include potential over-clustering noise and the gap to oracle GDRO's performance ($96.8%$ on U-MNIST). These results showcase my ability to implement and validate complex ML methods for robust classification.
+The ERM baseline achieved *0*% robust accuracy (worst-case subclass accuracy) on 2 different groups and an under *20*% accuracy on 14 different groups, struggling with rare background color subclasses due to dataset imbalance. GEORGE achieved a robust accuracy to *18*% for 1 group and an under *20*% accuracy on only one group, an *18* point increase for robust accuracy and a *93*% reduction in group misclassifications under *20*%, by identifying and optimizing for these subclasses. This aligns with the paper's reported improvements (e.g., $22%$ on datasets like Waterbirds). Challenges included ensuring clustering captured small subclasses and managing DRO's computational cost. Limitations to the models performace include overclustering due to the fixed subcluster count instead of a dynamic one using a silhouette score. While the reason for doing this is sound-overclustering ensures that rare subgroups will be grouped properly compared to the silhouette score method-this also means that images that should be treated in the same group are treated differently during training, slowing down training.
 
 # Visualizations
 ***Loss Over Epochs***
 
-![Training and Testing Loss](ERM.png)
+![Training and Testing Loss](images/ERM.png)
 
 *Figure 1: Training and Testing loss for ERM*
 
-![scaled_training loss](unscaled_loss.png)
+![GDRO training loss](images/GDRO_loss.png)
 
-*Figure 2: Testing loss for group DRO, scaled to the size of the ERM loss plot*
+*Figure 2: Worst Group and Testing loss for group DRO*
 
-![unscaled training loss](scaled_loss.png)
+***Accuracy Over Groups***
 
-*Figure 3: Testing loss for group DRO, unscaled*
+![ERM Bar Chart](images/ERM_bar_graph.png)
+*Figure 3: Accuracy for each group after training with ERM*
+
+![GDRO Bar Chart](images/GDRO_Robust_Accuracy.png)
+*Figure 4: Accuracy for each group after training with clustering and GDRO*
 
 </br>
 
 ***Sample Digits***
 
-![sample digit](digit.png)
+![sample digit](images/digit.png)
 
-*Figure 4: Digit with spurious correlation (background)*
+*Figure 5: Digit with spurious correlation (background)*
 
 # Reproducibility
 To reproduce the results, ensure a Python environment with PyTorch, UMAP, scikit-learn, pandas, matplotlib, and seaborn. A GPU is recommended for faster training.
@@ -138,3 +142,5 @@ This project is licensed under the MIT License
 # Acknowledgements
 
 Thanks to Sohoni et al. for their pioneering GEORGE method, the BigML research group at UCLA for inspiring this project, and PyTorch, UMAP, scikit-learn, and pandas for enabling the implementation.
+
+
