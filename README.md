@@ -71,9 +71,11 @@ The ERM baseline achieved *0*% robust accuracy (worst-case subclass accuracy) on
 ***Accuracy Over Groups***
 
 ![ERM Bar Chart](images/ERM_bar_graph.png)
+
 *Figure 3: Accuracy for each group after training with ERM*
 
 ![GDRO Bar Chart](images/GDRO_Robust_Accuracy.png)
+
 *Figure 4: Accuracy for each group after training with clustering and GDRO*
 
 </br>
